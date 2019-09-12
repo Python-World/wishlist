@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang=”en”>
+ <head>
+ <meta charset=”utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+</head>
+</head>
+<body>
+    <a href="{% url 'WishList' %}" class="btn btn-primary">Back</a>
+
+<div class="col-md-5 col-md-offset-3">
+    <h3>Simple My Wish List Application Using CRUD</h3>
+</div>
+<div class="col-md-5 col-md-offset-3">
+</div>
+<div class="col-md-5 col-md-offset-3">
+    <form method="POST">
+        {% csrf_token %}
+        <table class="table" border="1">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Fields</th>
+            <th>Fill Data</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form }}</td>
+            </tr>
+
+         </tbody>
+    </table>
+    <button class="btn btn-success" type="submit">Save</button>
+        {% if wish %}
+            <a href="{% url 'DeleteWish' wish.id %}" class="btn btn-danger" type="submit">Delete</a>
+
+        {% endif %}
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js" ></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm</title>
+</head>
+<body>
+
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang=”en”>
+ <head>
+ <meta charset=”utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+</head>
+</head>
+<body>
+<div class="col-md-5 col-md-offset-3">
+    <h3>Simple My Wish List Application Using CRUD</h3>
+</div>
+
+<div class="col-md-5 col-md-offset-3">
+<form method="POST">
+    {% csrf_token %}
+    <h3>Are You Sure To Delete</h3>
+    <h4>{{ wish.title }}</h4>
+    <button class="btn btn-success" type="submit">Confirm</button>
+</form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js" ></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.js"></script>
+</body>
+</html>
