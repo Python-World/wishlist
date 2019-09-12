@@ -46,5 +46,5 @@ Full Working Demo
 ![CRUD](https://github.com/chavarera/Django-CRUD/blob/master/img/FirstApp.gif)
 
 
-## contributor
+## Contributor
 [Ravishankar  Chavare](http://github.com/chavarera)
