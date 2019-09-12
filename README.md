@@ -11,8 +11,13 @@ python==3.73
 ```
 
 ## Installation
+
+Clone This Repository or Download on your local machine
 ```
 git clone https://github.com/chavarera/Django-CRUD.git
+```
+Change Directory Path (Or Open Terminal in Project Directory where **manage.py** file is located)
+```
 cd Django-CRUD/
 ```
 
