@@ -1,8 +1,9 @@
 from django.db import models
 
-# Create your models here.
 class Wish(models.Model):
-    wishtitle=models.CharField(max_length=250)
-    mywish=models.CharField(max_length=1000)
+    wishtitle = models.CharField(max_length=200)
+    mywish = models.TextField()
+    deadline = models.DateField(blank=True, null=True)  # Make deadline optional
+
     def __str__(self):
-        return  self.wishtitle
+        return self.wishtitle

@@ -1,6 +1,10 @@
-from django.forms import ModelForm
-from  .models import Wish
-class WishForm(ModelForm):
+from django import forms
+from .models import Wish
+
+class WishForm(forms.ModelForm):
     class Meta:
-        model=Wish
-        fields='__all__'
+        model = Wish
+        fields = ['wishtitle', 'mywish', 'deadline']
+        widgets = {
+            'deadline': forms.DateInput(attrs={'type': 'date'})
+        }

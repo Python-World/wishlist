@@ -1,42 +1,103 @@
 <!DOCTYPE html>
-<html lang=”en”>
- <head>
- <meta charset=”utf-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-</head>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpaperaccess.com/full/2557688.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .content-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        .content-container h3 {
+            color: #343a40;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            font-size: 16px;
+        }
+        .due-reminder {
+            background-color: #ffcccb;
+            color: #a94442;
+            font-weight: bold;
+        }
+        .reminder-alert {
+            background-color: #dff0d8;
+            color: #3c763d;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<div class="col-md-5 col-md-offset-3">
-    <h3>Simple My Wish List Application Using CRUD</h3>
-</div>
-<div class="col-md-5 col-md-offset-3">
-    <a href="{% url 'CreateWish' %}" class="btn btn-primary">Add New</a>
+    <div class="content-container">
+        <h3>My Audio Wish List Application</h3>
+        <a href="{% url 'CreateWish' %}" class="btn btn-primary">Add New</a>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">My Wish</th>
+                    <th scope="col">Deadline</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for wish in wishes %}
+                <tr {% if wish in due_wishes %}class="due-reminder"{% endif %}>
+                    <td>{{ wish.id }}</td>
+                    <td><a href="{% url 'UpdateWish' wish.id %}">{{ wish.wishtitle }}</a></td>
+                    <td>{{ wish.mywish }}</td>
+                    <td>{{ wish.deadline }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+        {% if reminder_wishes %}
+        <div class="alert alert-info reminder-alert">
+            <strong>Reminder:</strong> The following wishes have deadlines tomorrow.
+            <ul>
+                {% for wish in reminder_wishes %}
+                <li>{{ wish.wishtitle }} - {{ wish.deadline }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
-</div>
-<div class="col-md-5 col-md-offset-3">
-    <table class="table" border="1">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Id</th>
-      <th scope="col">Title</th>
-      <th scope="col">My Wish</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for wish in wishes %}
-  <tr>
-      <td>{{ wish.id }}</td>
-      <td><a href="{% url 'UpdateWish' wish.id %}">{{ wish.wishtitle }}</a></td>
-      <td>{{wish.mywish}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
+        {% if due_wishes %}
+        <div class="alert alert-warning">
+            <strong>Reminder:</strong> The following wishes have deadlines today.
+        </div>
+        {% endif %}
+    </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
- <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js" ></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

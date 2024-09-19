@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import CreateWish,UpdateWish,DeleteWish,WishList
+from . import views
 
-urlpatterns=[
-    path('',WishList,name='WishList'),
-    path('create',CreateWish,name='CreateWish'),
-    path('update/<int:id>',UpdateWish,name='UpdateWish'),
-    path('delete/<int:id>',DeleteWish,name='DeleteWish'),
-
+urlpatterns = [
+    path('', views.WishList, name='WishList'),
+    path('create/', views.CreateWish, name='CreateWish'),
+    path('update/<int:id>/', views.UpdateWish, name='UpdateWish'),
+    path('delete/<int:id>/', views.DeleteWish, name='DeleteWish'),
+    path('search/<str:text>/', views.Search, name='Search'),  # Added search URL
 ]
