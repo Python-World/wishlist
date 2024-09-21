@@ -78,7 +78,7 @@
                 {% endfor %}
             </tbody>
         </table>
-
+      <!-- If there are any reminder wishes, show a reminder alert -->  
         {% if reminder_wishes %}
         <div class="alert alert-info reminder-alert">
             <strong>Reminder:</strong> The following wishes have deadlines tomorrow.
@@ -89,7 +89,7 @@
             </ul>
         </div>
         {% endif %}
-
+    <!-- If there are any due wishes, show a due reminder -->
         {% if due_wishes %}
         <div class="alert alert-warning">
             <strong>Reminder:</strong> The following wishes have deadlines today.

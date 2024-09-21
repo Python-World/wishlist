@@ -61,6 +61,7 @@
         <div class="form-header">
             <h2>My Audio Wish List</h2>
         </div>
+        <!-- Button to navigate back to the wish list -->
         <a href="{% url 'WishList' %}" class="btn btn-primary">Back</a>
         <form method="POST">
             {% csrf_token %}
@@ -73,6 +74,8 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <!-- Dropdown for selecting the language for speech recognition -->
+
                         <td>Language:</td>
                         <td>
                             <select id="language-selector" class="form-control">
@@ -86,6 +89,8 @@
                             </select>
                         </td>
                     </tr>
+
+                    <!-- Input field for Wish Title with microphone for speech input -->
                     <tr>
                         <td>Wish Title:</td>
                         <td>
@@ -130,44 +135,53 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const micIcons = document.querySelectorAll('.fa-microphone');
-            const languageSelector = document.getElementById('language-selector');
-
-            micIcons.forEach(icon => {
-                icon.addEventListener('click', () => {
-                    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-                        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                        recognition.lang = languageSelector.value;
-                        
-                        recognition.onstart = () => {
-                            icon.classList.add('recording');
-                            icon.title = "Listening...";
-                        };
-
-                        recognition.onresult = event => {
-                            const transcript = event.results[0][0].transcript;
-                            if (icon.id === 'record-title') {
-                                document.querySelector('input[name="wishtitle"]').value = transcript;
-                            } else if (icon.id === 'record-wish') {
-                                document.querySelector('input[name="mywish"]').value = transcript;
-                            }
-                            icon.classList.remove('recording');
-                            icon.title = "Click to record";
-                        };
-
-                        recognition.onerror = event => {
-                            console.error('Speech recognition error:', event.error);
-                            icon.classList.remove('recording');
-                            icon.title = "Click to record";
-                        };
-
-                        recognition.onend = () => {
-                            icon.classList.remove('recording');
-                            icon.title = "Click to record";
-                        };
-
+    
+        <!-- Speech Recognition Functionality -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const micIcons = document.querySelectorAll('.fa-microphone');
+                const languageSelector = document.getElementById('language-selector');
+    
+                micIcons.forEach(icon => {
+                    icon.addEventListener('click', () => {
+                        // Check if the browser supports speech recognition
+                        if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+                            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                            recognition.lang = languageSelector.value;
+    
+                            // When speech recognition starts
+                            recognition.onstart = () => {
+                                icon.classList.add('recording');
+                                icon.title = "Listening...";
+                            };
+    
+                            // On receiving the result from speech recognition
+                            recognition.onresult = event => {
+                                const transcript = event.results[0][0].transcript;
+                                if (icon.id === 'record-title') {
+                                    document.querySelector('input[name="wishtitle"]').value = transcript;
+                                } else if (icon.id === 'record-wish') {
+                                    document.querySelector('input[name="mywish"]').value = transcript;
+                                }
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // Handling errors in speech recognition
+                            recognition.onerror = event => {
+                                console.error('Speech recognition error:', event.error);
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // When speech recognition ends
+                            recognition.onend = () => {
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // Start speech recognition
+    
                         recognition.start();
                     } else {
                         alert('Your browser does not support speech recognition.');
