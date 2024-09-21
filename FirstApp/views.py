@@ -1,38 +1,72 @@
-from django.shortcuts import render, redirect  # For Render and Redireting to Function views
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from .models import Wish
 from .forms import WishForm
+from datetime import timedelta
 
 
-# Create your views here.
+# View to list all wishes
 def WishList(request):
-    wish = Wish.objects.all();  # Create Object of Wish Class Model
-    params = {'wishes': wish}  # Create Parameter to Send To View
-    return render(request, 'Wishes.html', params)  # Return Wishes To The Html Page
+    today = timezone.now().date()
+    tomorrow = today + timedelta(days=1)
+    wishes = Wish.objects.all()
+    due_wishes = Wish.objects.filter(deadline=today)  # Wishes with today's deadline
+    reminder_wishes = Wish.objects.filter(
+        deadline=tomorrow
+    )  # Wishes with tomorrow's deadline
+
+    params = {
+        "wishes": wishes,
+        "due_wishes": due_wishes,
+        "reminder_wishes": reminder_wishes,
+    }
+    return render(request, "Wishes.html", params)
 
 
+# View to create a new wish
 def CreateWish(request):
     form = WishForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('WishList')
-    return render(request, 'WishForm.html', {'form': form})
+        return redirect("WishList")
+    return render(request, "WishForm.html", {"form": form})
 
 
+# View to update an existing wish
 def UpdateWish(request, id):
-    wish = Wish.objects.get(id=id)
+    wish = get_object_or_404(Wish, id=id)
     form = WishForm(request.POST or None, instance=wish)
     if form.is_valid():
         form.save()
-        return redirect('WishList')
-    return render(request, 'WishForm.html', {'form': form, 'wish': wish})
+        return redirect("WishList")
+    return render(request, "WishForm.html", {"form": form, "wish": wish})
 
 
+# View to delete a wish
 def DeleteWish(request, id):
-    wish = Wish.objects.get(id=id)
-    if request.method == 'POST':
+    wish = get_object_or_404(Wish, id=id)
+    if request.method == "POST":
         wish.delete()
-        return redirect('WishList')
-    return render(request, 'DeleteConfirm.html', {'wish': wish})
+        return redirect("WishList")
+    return render(request, "DeleteConfirm.html", {"wish": wish})
 
-def Search(request,text):
-    wish=Wish.objects.filter()
+
+# View to search for a wish by title
+def Search(request, text):
+    wishes = Wish.objects.filter(wishtitle__icontains=text)  # Filter by wish title
+    today = timezone.now().date()
+    tomorrow = today + timedelta(days=1)
+    due_wishes = Wish.objects.filter(deadline=today)  # Wishes with today's deadline
+    reminder_wishes = Wish.objects.filter(
+        deadline=tomorrow
+    )  # Wishes with tomorrow's deadline
+
+    return render(
+        request,
+        "Wishes.html",
+        {
+            "wishes": wishes,
+            "due_wishes": due_wishes,
+            "reminder_wishes": reminder_wishes,
+        },
+    )

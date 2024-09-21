@@ -1,45 +1,194 @@
 <!DOCTYPE html>
-<html lang=”en”>
- <head>
- <meta charset=”utf-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-</head>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-image: url('https://wallpaperaccess.com/full/2557688.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container h2 {
+            color: #343a40;
+            font-size: 24px;
+        }
+        .btn-primary {
+            background-color: #6c757d;
+            margin-bottom: 20px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        .btn-danger {
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        .recording {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <a href="{% url 'WishList' %}" class="btn btn-primary">Back</a>
+    <div class="form-container">
+        <div class="form-header">
+            <h2>My Audio Wish List</h2>
+        </div>
+        <!-- Button to navigate back to the wish list -->
+        <a href="{% url 'WishList' %}" class="btn btn-primary">Back</a>
+        <form method="POST">
+            {% csrf_token %}
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Fields</th>
+                        <th>Fill Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- Dropdown for selecting the language for speech recognition -->
 
-<div class="col-md-5 col-md-offset-3">
-    <h3>Simple My Wish List Application Using CRUD</h3>
-</div>
-<div class="col-md-5 col-md-offset-3">
-</div>
-<div class="col-md-5 col-md-offset-3">
-    <form method="POST">
-        {% csrf_token %}
-        <table class="table" border="1">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Fields</th>
-            <th>Fill Data</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ form }}</td>
-            </tr>
+                        <td>Language:</td>
+                        <td>
+                            <select id="language-selector" class="form-control">
+                                <option value="en-US">English (US)</option>
+                                <option value="hi-IN">Hindi (India)</option>
+                                <option value="mr-IN">Marathi (India)</option>
+                                <option value="gu-IN">Gujarati (India)</option>
+                                <option value="ml-IN">Malayalam (India)</option>
+                                <option value="bn-IN">Bengali (India)</option>
+                                <option value="te-IN">Telugu (India)</option>
+                            </select>
+                        </td>
+                    </tr>
 
-         </tbody>
-    </table>
-    <button class="btn btn-success" type="submit">Save</button>
-        {% if wish %}
-            <a href="{% url 'DeleteWish' wish.id %}" class="btn btn-danger" type="submit">Delete</a>
+                    <!-- Input field for Wish Title with microphone for speech input -->
+                    <tr>
+                        <td>Wish Title:</td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fas fa-microphone" id="record-title"></i>
+                                </span>
+                                <input type="text" name="wishtitle" class="form-control" value="{{ wish.wishtitle }}">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>My Wish:</td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fas fa-microphone" id="record-wish"></i>
+                                </span>
+                                <input type="text" name="mywish" class="form-control" value="{{ wish.mywish }}">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Deadline:</td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fas fa-calendar"></i>
+                                </span>
+                                <input type="date" name="deadline" class="form-control" value="{{ wish.deadline }}">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-success" type="submit">Save</button>
+            {% if wish %}
+                <a href="{% url 'DeleteWish' wish.id %}" class="btn btn-danger">Delete</a>
+            {% endif %}
+        </form>
+    </div>
 
-        {% endif %}
-    </form>
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
- <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js" ></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.1/vue-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+        <!-- Speech Recognition Functionality -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const micIcons = document.querySelectorAll('.fa-microphone');
+                const languageSelector = document.getElementById('language-selector');
+    
+                micIcons.forEach(icon => {
+                    icon.addEventListener('click', () => {
+                        // Check if the browser supports speech recognition
+                        if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+                            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                            recognition.lang = languageSelector.value;
+    
+                            // When speech recognition starts
+                            recognition.onstart = () => {
+                                icon.classList.add('recording');
+                                icon.title = "Listening...";
+                            };
+    
+                            // On receiving the result from speech recognition
+                            recognition.onresult = event => {
+                                const transcript = event.results[0][0].transcript;
+                                if (icon.id === 'record-title') {
+                                    document.querySelector('input[name="wishtitle"]').value = transcript;
+                                } else if (icon.id === 'record-wish') {
+                                    document.querySelector('input[name="mywish"]').value = transcript;
+                                }
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // Handling errors in speech recognition
+                            recognition.onerror = event => {
+                                console.error('Speech recognition error:', event.error);
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // When speech recognition ends
+                            recognition.onend = () => {
+                                icon.classList.remove('recording');
+                                icon.title = "Click to record";
+                            };
+    
+                            // Start speech recognition
+    
+                        recognition.start();
+                    } else {
+                        alert('Your browser does not support speech recognition.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
